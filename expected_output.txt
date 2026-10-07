@@ -1,0 +1,54 @@
+crqc          migration      p_vuln  exp_yrs
+aggressive    optimistic     0.4142     1.08
+aggressive    baseline       0.8845     3.49
+aggressive    pessimistic    0.9871     7.14
+moderate      optimistic     0.1316     0.92
+moderate      baseline       0.5174     2.47
+moderate      pessimistic    0.8020     5.08
+conservative  optimistic     0.0264     0.78
+conservative  baseline       0.1891     1.83
+conservative  pessimistic    0.4410     3.58
+
+BASELINE (moderate x baseline): p_vuln=0.5174  median_exposure=2.47
+overall median window (all iters): 0.18
+median emergence year (moderate): 2033.98
+median completion year (baseline): 2034.26
+worst-case (aggr x pess) median window among vulnerable: 7.13
+
+emergence median / P90:
+  aggressive    median=2031.0  P90=2033.8
+  moderate      median=2034.0  P90=2040.2
+  conservative  median=2039.0  P90=2050.7
+
+emergence sweep (median year -> p_vuln), deployment=baseline:
+  median~2029  p_vuln=0.978
+  median~2030  p_vuln=0.931
+  median~2031  p_vuln=0.838
+  median~2032  p_vuln=0.730
+  median~2033  p_vuln=0.618
+  median~2034  p_vuln=0.508
+  median~2035  p_vuln=0.422
+  median~2036  p_vuln=0.338
+  median~2037  p_vuln=0.265
+  median~2038  p_vuln=0.208
+  median~2039  p_vuln=0.174
+  median~2040  p_vuln=0.141
+
+deployment duration sweep (years -> p_vuln), emergence=moderate:
+  len= 3  p_vuln=0.291
+  len= 4  p_vuln=0.320
+  len= 5  p_vuln=0.376
+  len= 6  p_vuln=0.446
+  len= 7  p_vuln=0.525
+  len= 8  p_vuln=0.588
+  len= 9  p_vuln=0.637
+  len=10  p_vuln=0.685
+  len=11  p_vuln=0.708
+  len=12  p_vuln=0.718
+
+emergence marginal near 2034: 9.8 pts/yr
+deployment marginal near 7yr: 7.1 pts/yr
+emergence range 2029->2040: 98% -> 14%
+deployment range 12yr->3yr: 72% -> 29%
+
+Wrote figure1_scenario_matrix.png, figure2_baseline_distributions.png, figure3_sensitivity.png
