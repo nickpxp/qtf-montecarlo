@@ -8,6 +8,7 @@ Run:  python qtf_montecarlo.py
 """
 
 import numpy as np
+from scipy.stats import truncnorm
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 
@@ -22,7 +23,8 @@ CRQC = {
     "conservative": (np.log(13), 0.50),   # Nat'l Academies ~2039
 }
 
-# Migration: finish = start + length, both truncated normal.
+# Migration: finish = start + length, both truncated normal (resampled inside
+# the bounds, not clipped; clipping piles mass on the bounds).
 # (start_mid, start_sd, start_lo, start_hi, len_mid, len_sd, len_lo, len_hi)
 MIG = {
     "optimistic":  (2026, 0.75, 2026, 2028,  4, 1.0, 2.5,  6),
@@ -31,12 +33,18 @@ MIG = {
 }
 
 
+def tnorm(mid, sd, lo, hi, rng):
+    """Truncated normal draw; mid/sd are the untruncated parameters."""
+    return truncnorm.rvs((lo - mid) / sd, (hi - mid) / sd, loc=mid, scale=sd,
+                         size=N, random_state=rng)
+
+
 def run_one(cm, cs, m, rng, force_len=None):
     """One scenario. Returns p_vuln, median exposure among vulnerable, and vw."""
     t_crqc = BASE + rng.lognormal(cm, cs, N)
-    start = np.clip(rng.normal(m[0], m[1], N), m[2], m[3])
+    start = tnorm(m[0], m[1], m[2], m[3], rng)
     lmid = m[4] if force_len is None else force_len
-    length = np.clip(rng.normal(lmid, m[5], N), m[6], m[7])
+    length = tnorm(lmid, m[5], m[6], m[7], rng)
     vw = (start + length) - t_crqc
     bad = vw > 0
     return {
